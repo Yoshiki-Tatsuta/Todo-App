@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# django
+/todo_backend/db.sqlite3
+/todo_backend/todo_backend/__pycache__
