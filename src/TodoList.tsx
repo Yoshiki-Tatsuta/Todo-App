@@ -9,10 +9,11 @@ interface Todo {
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [newTask, setNewTask] = useState<Todo>({ id: 0, title: "", description: "" });
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/api/todos/')
+      .get<Todo[]>("http://localhost:8000/api/todos/")
       .then((response) => {
         setTodos(response.data);
       })
@@ -41,7 +42,7 @@ const TodoList: React.FC = () => {
 
   const handleUpdate = (todo: Todo) => {
     axios
-      .put(`http://localhost:8000/api/todos/${todo.id}/`, todo)
+      .put<Todo>(`http://localhost:8000/api/todos/${todo.id}/`, todo)
       .then((response) => {
         console.log("Todo updated:", response.data);
         setTodos((prevTodos) =>
@@ -52,7 +53,29 @@ const TodoList: React.FC = () => {
         console.error(error);
       });
   };
-  
+
+  const handleAddTask = () => {
+    axios
+      .post<Todo>("http://localhost:8000/api/todos/", newTask)
+      .then((response) => {
+        console.log("New task added:", response.data);
+        setTodos((prevTodos) => [...prevTodos, response.data]);
+        setNewTask({ id: 0, title: "", description: "" });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleNewTaskTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const title = e.target.value;
+    setNewTask((prevTask) => ({ ...prevTask, title }));
+  };
+
+  const handleNewTaskDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const description = e.target.value;
+    setNewTask((prevTask) => ({ ...prevTask, description }));
+  };
 
   return (
     <div>
@@ -63,17 +86,36 @@ const TodoList: React.FC = () => {
             <input
               type="text"
               value={todo.title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTitleChange(e, todo.id)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleTitleChange(e, todo.id)
+              }
             />
             <input
               type="text"
               value={todo.description}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDescriptionChange(e, todo.id)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleDescriptionChange(e, todo.id)
+              }
             />
-            <button onClick={() => handleUpdate(todo)}>Update</button>
+            <button onClick={() => handleUpdate(todo)}>更新</button>
           </li>
         ))}
       </ul>
+      <div>
+        <input
+          type="text"
+          value={newTask.title}
+          onChange={handleNewTaskTitleChange}
+          placeholder="タスク名"
+        />
+        <input
+          type="text"
+          value={newTask.description}
+          onChange={handleNewTaskDescriptionChange}
+          placeholder="タスクの説明"
+        />
+        <button onClick={handleAddTask}>追加</button>
+      </div>
     </div>
   );
 };
