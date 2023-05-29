@@ -77,6 +77,18 @@ const TodoList: React.FC = () => {
     setNewTask((prevTask) => ({ ...prevTask, description }));
   };
 
+  const handleDelete = (id: number) => {
+    axios
+      .delete(`http://localhost:8000/api/todos/${id}/`)
+      .then(() => {
+        setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+        console.log("Todo deleted:", id);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <div>
       <h1>Todo List</h1>
@@ -98,6 +110,7 @@ const TodoList: React.FC = () => {
               }
             />
             <button onClick={() => handleUpdate(todo)}>更新</button>
+            <button onClick={() => handleDelete(todo.id)}>削除</button>
           </li>
         ))}
       </ul>
