@@ -112,6 +112,13 @@ const TodoList: React.FC = () => {
     setNewTask((prevTask) => ({ ...prevTask, date: formattedDate }));
   };
 
+  const handleDateUpdate = (todo: Todo, date: Date | null) => {
+    const updatedTodo = { ...todo, date: date ? date.toISOString().slice(0, 10) : null };
+    setTodos((prevTodos) =>
+      prevTodos.map((t) => (t.id === todo.id ? updatedTodo : t))
+    );
+  };
+
   return (
     <div>
       <h1>Todo List</h1>
@@ -136,7 +143,7 @@ const TodoList: React.FC = () => {
             />
             <DatePicker
               selected={todo.date ? new Date(todo.date) : null}
-              onChange={(date: Date | null) => handleDateChange(date)}
+              onChange={(date: Date | null) => handleDateUpdate(todo, date)}
               placeholderText="期限を選択"
               dateFormat="yyyy-MM-dd"
             />
