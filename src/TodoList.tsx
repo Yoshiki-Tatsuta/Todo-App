@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface Todo {
   id: number;
   title: string;
   description: string;
+  date: string | null;
 }
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTask, setNewTask] = useState<Todo>({ id: 0, title: "", description: "" });
+  const [newTask, setNewTask] = useState<Todo>({
+    id: 0,
+    title: "",
+    description: "",
+    date: null,
+  });
 
   useEffect(() => {
     axios
@@ -22,7 +30,10 @@ const TodoList: React.FC = () => {
       });
   }, []);
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+  const handleTitleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
     const updatedTitle = e.target.value;
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
@@ -31,7 +42,10 @@ const TodoList: React.FC = () => {
     );
   };
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
     const updatedDescription = e.target.value;
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
@@ -60,19 +74,23 @@ const TodoList: React.FC = () => {
       .then((response) => {
         console.log("New task added:", response.data);
         setTodos((prevTodos) => [...prevTodos, response.data]);
-        setNewTask({ id: 0, title: "", description: "" });
+        setNewTask({ id: 0, title: "", description: "", date: null });
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const handleNewTaskTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewTaskTitleChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const title = e.target.value;
     setNewTask((prevTask) => ({ ...prevTask, title }));
   };
 
-  const handleNewTaskDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewTaskDescriptionChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const description = e.target.value;
     setNewTask((prevTask) => ({ ...prevTask, description }));
   };
@@ -89,6 +107,11 @@ const TodoList: React.FC = () => {
       });
   };
 
+  const handleDateChange = (date: Date | null) => {
+    const formattedDate = date ? date.toISOString().slice(0, 10) : null;
+    setNewTask((prevTask) => ({ ...prevTask, date: formattedDate }));
+  };
+
   return (
     <div>
       <h1>Todo List</h1>
@@ -101,6 +124,7 @@ const TodoList: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleTitleChange(e, todo.id)
               }
+              placeholder="タスク名"
             />
             <input
               type="text"
@@ -108,6 +132,13 @@ const TodoList: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleDescriptionChange(e, todo.id)
               }
+              placeholder="タスクの説明"
+            />
+            <DatePicker
+              selected={todo.date ? new Date(todo.date) : null}
+              onChange={(date: Date | null) => handleDateChange(date)}
+              placeholderText="期限を選択"
+              dateFormat="yyyy-MM-dd"
             />
             <button onClick={() => handleUpdate(todo)}>更新</button>
             <button onClick={() => handleDelete(todo.id)}>削除</button>
@@ -126,6 +157,12 @@ const TodoList: React.FC = () => {
           value={newTask.description}
           onChange={handleNewTaskDescriptionChange}
           placeholder="タスクの説明"
+        />
+        <DatePicker
+          selected={newTask.date ? new Date(newTask.date) : null}
+          onChange={(date: Date | null) => handleDateChange(date)}
+          placeholderText="期限を選択"
+          dateFormat="yyyy-MM-dd"
         />
         <button onClick={handleAddTask}>追加</button>
       </div>

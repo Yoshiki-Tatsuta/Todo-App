@@ -3,6 +3,6 @@ from .models import Todo
 
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
-        app_label = 'todo_backend'
+        # app_label = 'todo_backend'
         model = Todo
-        fields = ('id', 'title', 'completed', 'description')
+        fields = ('id', 'title', 'completed', 'description', 'date')
