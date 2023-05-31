@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import './index.css';
 
 interface Todo {
   id: number;
@@ -121,10 +122,10 @@ const TodoList: React.FC = () => {
 
   return (
     <div>
-      <h1>Todo List</h1>
+      <h1 className="text-3xl font-bold mb-4">Todo List</h1>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>
+          <li key={todo.id} className="mb-4">
             <input
               type="text"
               value={todo.title}
@@ -132,6 +133,7 @@ const TodoList: React.FC = () => {
                 handleTitleChange(e, todo.id)
               }
               placeholder="タスク名"
+              className="border border-gray-300 rounded py-2 px-3 mb-1"
             />
             <input
               type="text"
@@ -140,38 +142,58 @@ const TodoList: React.FC = () => {
                 handleDescriptionChange(e, todo.id)
               }
               placeholder="タスクの説明"
+              className="border border-gray-300 rounded py-2 px-3 mb-1"
             />
             <DatePicker
               selected={todo.date ? new Date(todo.date) : null}
               onChange={(date: Date | null) => handleDateUpdate(todo, date)}
               placeholderText="期限を選択"
               dateFormat="yyyy-MM-dd"
+              className="border border-gray-300 rounded py-2 px-3 mb-1"
             />
-            <button onClick={() => handleUpdate(todo)}>更新</button>
-            <button onClick={() => handleDelete(todo.id)}>削除</button>
+            <button
+              onClick={() => handleUpdate(todo)}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+            >
+              更新
+            </button>
+            <button
+              onClick={() => handleDelete(todo.id)}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              削除
+            </button>
           </li>
         ))}
       </ul>
-      <div>
+      <div className="mt-4">
         <input
           type="text"
           value={newTask.title}
           onChange={handleNewTaskTitleChange}
           placeholder="タスク名"
+          className="border border-gray-300 rounded py-2 px-3 mb-1"
         />
         <input
           type="text"
           value={newTask.description}
           onChange={handleNewTaskDescriptionChange}
           placeholder="タスクの説明"
+          className="border border-gray-300 rounded py-2 px-3 mb-1"
         />
         <DatePicker
           selected={newTask.date ? new Date(newTask.date) : null}
           onChange={(date: Date | null) => handleDateChange(date)}
           placeholderText="期限を選択"
           dateFormat="yyyy-MM-dd"
+          className="border border-gray-300 rounded py-2 px-3 mb-1"
         />
-        <button onClick={handleAddTask}>追加</button>
+        <button
+          onClick={handleAddTask}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          追加
+        </button>
       </div>
     </div>
   );
