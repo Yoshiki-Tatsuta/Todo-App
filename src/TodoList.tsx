@@ -123,12 +123,14 @@ const TodoList: React.FC = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-4">Todo List</h1>
+      <p>homeへ</p>
+      <br></br>
       <ul>
         {todos.map((todo) => (
           <li key={todo.id} className="mb-4">
             <input
               type="text"
-              value={todo.title}
+              // value={todo.title}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleTitleChange(e, todo.id)
               }
@@ -137,7 +139,7 @@ const TodoList: React.FC = () => {
             />
             <input
               type="text"
-              value={todo.description}
+              // value={todo.description}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleDescriptionChange(e, todo.id)
               }
@@ -151,6 +153,11 @@ const TodoList: React.FC = () => {
               dateFormat="yyyy-MM-dd"
               className="border border-gray-300 rounded py-2 px-3 mb-1"
             />
+            <ul>
+              <li>・タスク名：{todo.title}</li>
+              <li>・説明：{todo.description}</li>
+              <li>・予定日：{todo.date}</li>
+            </ul>
             <button
               onClick={() => handleUpdate(todo)}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
