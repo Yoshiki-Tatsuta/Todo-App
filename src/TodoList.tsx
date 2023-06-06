@@ -3,6 +3,7 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import './index.css';
+import { Link } from "react-router-dom";
 
 interface Todo {
   id: number;
@@ -122,8 +123,8 @@ const TodoList: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-4">Todo List</h1>
-      <p>homeへ</p>
+      <h1 className="flex justify-center text-5xl font-bold mb-4 text-blue-400">Todo List</h1>
+      <p className="text-lg">●<span className="underline decoration-double decoration-blue-500"><Link to={'/'}>HOME</Link></span>に戻る</p>
       <br></br>
       <ul>
         {todos.map((todo) => (
@@ -135,7 +136,7 @@ const TodoList: React.FC = () => {
                 handleTitleChange(e, todo.id)
               }
               placeholder="タスク名"
-              className="border border-gray-300 rounded py-2 px-3 mb-1"
+              className="border border-gray-300 rounded py-2 px-3 mb-1 text-sm"
             />
             <input
               type="text"
@@ -144,7 +145,7 @@ const TodoList: React.FC = () => {
                 handleDescriptionChange(e, todo.id)
               }
               placeholder="タスクの説明"
-              className="border border-gray-300 rounded py-2 px-3 mb-1"
+              className="border border-gray-300 rounded py-2 px-3 mb-1 text-sm"
             />
             <DatePicker
               selected={todo.date ? new Date(todo.date) : null}
@@ -153,20 +154,20 @@ const TodoList: React.FC = () => {
               dateFormat="yyyy-MM-dd"
               className="border border-gray-300 rounded py-2 px-3 mb-1"
             />
-            <ul>
+            <ul className="">
               <li>・タスク名：{todo.title}</li>
               <li>・説明：{todo.description}</li>
               <li>・予定日：{todo.date}</li>
             </ul>
             <button
               onClick={() => handleUpdate(todo)}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+              className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
             >
               更新
             </button>
             <button
               onClick={() => handleDelete(todo.id)}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-red-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
               削除
             </button>
